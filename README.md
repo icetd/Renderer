@@ -10,7 +10,6 @@ sudo apt-get install xorg-dev libglu1-mesa-dev
 
 mkdir build && cd build
 cmake .. && make -j8
-
 ```
 ### WIN
 ```
