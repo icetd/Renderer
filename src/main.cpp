@@ -36,7 +36,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(800, 600, "Renderer", NULL, NULL);
+	window = glfwCreateWindow(800, 800, "Renderer", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		return -1;
@@ -57,10 +57,10 @@ int main()
 	LOG(NOTICE, "%s\n", glGetString(GL_VERSION));
 
 	float position[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f
+		 -50.0f, -50.0f, 0.0f, 0.0f,
+		  50.0f, -50.0f, 1.0f, 0.0f,
+		  50.0f,  50.0f, 1.0f, 1.0f,
+		 -50.0f,  50.0f, 0.0f, 1.0f
 	};
 
 	GLuint indices[] = {
@@ -83,13 +83,15 @@ int main()
 	/* IBO */
 	IndexBuffer ib(indices, 6);
 	
-	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(-400.0f, 400.0f, -400.0f, 400.0f, -1.0f, 1.0f);
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+	glm::mat4 mvp = proj * view;
 
 	/* shaderer */
 	Shader shader("../res/shaders/Basic.shader");
 	shader.Bind();
 	shader.SetUniform1i("u_Texture", 1);
-	shader.SetUniformMat4f("u_MVP", proj);
+	shader.SetUniformMat4f("u_MVP", mvp);
 
 
 	/* texture */

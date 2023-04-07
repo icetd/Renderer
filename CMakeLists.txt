@@ -19,11 +19,14 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (SOURCE_DIR  "${CMAKE_CURRENT_LIST_DIR}/src") 
 set (INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
-set (GLFW_INC	 "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glfw/include")
-set (GLAD_SRC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glad/src")
-set (GLAD_INC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glad/include")
-set (STB_IMAGE_INC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/stb_image")
-set (GLM_INC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glm")
+
+set (GLFW_INC			"${CMAKE_CURRENT_LIST_DIR}/thirdparty/glfw/include")
+set (GLAD_SRC			"${CMAKE_CURRENT_LIST_DIR}/thirdparty/glad/src")
+set (GLAD_INC			"${CMAKE_CURRENT_LIST_DIR}/thirdparty/glad/include")
+set (STB_IMAGE_INC		"${CMAKE_CURRENT_LIST_DIR}/thirdparty/stb_image")
+set (GLM_INC			"${CMAKE_CURRENT_LIST_DIR}/thirdparty/glm")
+set (IMGUI_SRC			"${CMAKE_CURRENT_LIST_DIR}/thirdparty/imgui_mini")
+
 
 message("${SOURCE_DIR}")
 message("${INCLUDE_DIR}")
@@ -34,6 +37,7 @@ include_directories(
 	${GLAD_INC}
 	${STB_IMAGE_INC}
 	${GLM_INC}
+	${IMGUI_SRC}
 ) 
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -41,10 +45,12 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 file(GLOB_RECURSE SRC_FILES
     "${SOURCE_DIR}/*.cpp"
     "${GLAD_SRC}/*.c"
+	"${IMGUI_SRC}/*.cpp"
 )
 
 file (GLOB_RECURSE INC_FILES
     "${INCLUDE_DIR}/*.h"
+	"${IMGUI_SRC}/*.h"
 )
 
 file (GLOB_RECURSE RES_FILES
