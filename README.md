@@ -13,6 +13,7 @@ cmake .. && make -j8
 ```
 ### WIN
 ```
+mkdir build && cd build
 camke ..
 use Visual Studio open the solution
 ```
