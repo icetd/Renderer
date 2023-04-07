@@ -4,6 +4,9 @@
 #include "Texture.h"
 #include "log.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 int LogLevel;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -80,10 +83,14 @@ int main()
 	/* IBO */
 	IndexBuffer ib(indices, 6);
 	
+	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
 	/* shaderer */
 	Shader shader("../res/shaders/Basic.shader");
 	shader.Bind();
 	shader.SetUniform1i("u_Texture", 1);
+	shader.SetUniformMat4f("u_MVP", proj);
+
 
 	/* texture */
 	Texture texture("../res/textures/tiandeng.png");

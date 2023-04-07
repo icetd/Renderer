@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(Renderer)
 
 add_subdirectory(thirdparty/glfw)
+add_subdirectory(thirdparty/glm)
 
 if (WIN32)
 	add_definitions()
@@ -22,6 +23,7 @@ set (GLFW_INC	 "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glfw/include")
 set (GLAD_SRC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glad/src")
 set (GLAD_INC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glad/include")
 set (STB_IMAGE_INC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/stb_image")
+set (GLM_INC    "${CMAKE_CURRENT_LIST_DIR}/thirdparty/glm")
 
 message("${SOURCE_DIR}")
 message("${INCLUDE_DIR}")
@@ -31,6 +33,7 @@ include_directories(
 	${GLFW_INC}
 	${GLAD_INC}
 	${STB_IMAGE_INC}
+	${GLM_INC}
 ) 
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
