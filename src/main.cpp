@@ -36,9 +36,12 @@ int main()
 	/* Initialize the library */
 	if (!glfwInit())
 		return -1;
+
+	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	window = glfwCreateWindow(800, 800, "Renderer", NULL, NULL);
 	if (!window) {
@@ -91,14 +94,11 @@ int main()
 	
 	glm::mat4 proj = glm::ortho(-400.0f, 400.0f, -400.0f, 400.0f, -1.0f, 1.0f);
 	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-	glm::mat4 mvp = proj * view;
 
 	/* shaderer */
 	Shader shader("../res/shaders/Basic.shader");
 	shader.Bind();
 	shader.SetUniform1i("u_Texture", 1);
-	shader.SetUniformMat4f("u_MVP", mvp);
-
 
 	/* texture */
 	Texture texture("../res/textures/tiandeng.png");
@@ -110,19 +110,19 @@ int main()
 	shader.UnBind();
 
 	Renderer renderer;
-	const char* glsl_version = "#version 130";
+
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
+	
 	IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.Fonts->AddFontFromFileTTF("../res/fonts/Yahei.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 	
+
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
-    bool show_demo_window = true;
-    bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+	glm::vec3 translation(0.0f, 0.0f, 0.0f);
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -134,47 +134,23 @@ int main()
 		ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+		
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+		glm::mat4 mvp = proj * view * model;
 
 		shader.Bind();
 		texture.Bind(1);
 		renderer.Draw(va, ib, shader);
 
-		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+        //Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
         {
             static float f = 0.0f;
             static int counter = 0;
 
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
+			ImGui::SliderFloat3("移动", &translation.x, -350.0f, 350.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            ImGui::End();
         }
-
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
-
+		shader.SetUniformMat4f("u_MVP", mvp);
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
