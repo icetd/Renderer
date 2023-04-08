@@ -44,12 +44,14 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 file(GLOB_RECURSE SRC_FILES
     "${SOURCE_DIR}/*.cpp"
+    "${SOURCE_DIR}/tests/*.cpp"
     "${GLAD_SRC}/*.c"
 	"${IMGUI_SRC}/*.cpp"
 )
 
 file (GLOB_RECURSE INC_FILES
     "${INCLUDE_DIR}/*.h"
+    "${SOURCE_DIR}/tests/*.h"
 	"${IMGUI_SRC}/*.h"
 )
 
