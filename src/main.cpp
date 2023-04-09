@@ -9,9 +9,10 @@
 #include "imgui_impl_opengl3.h"
 
 
+#include "tests/test.h"
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h"
-#include "tests/test.h"
+#include "tests/TestTexture3DP.h"
 
 int LogLevel;
 
@@ -82,6 +83,7 @@ int main()
 
 	testMenu->RegisterTest<test::TestClearColor>("Clear Color");
 	testMenu->RegisterTest<test::TestTexture2D>("Texture 2D");
+	testMenu->RegisterTest<test::TestTexture3DP>("Texture 3DP");
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -95,7 +97,7 @@ int main()
 		if (currentTest) {
 			currentTest->OnUpdate(0.0f);
 			currentTest->OnRender();
-			ImGui::Begin("Test");
+			ImGui::Begin("测试");
 			if (currentTest != testMenu && ImGui::Button("<-")) {
 				delete currentTest;
 				currentTest = testMenu;
